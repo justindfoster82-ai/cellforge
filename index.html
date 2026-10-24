@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0f24"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Cellforge"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#080d1c"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Cellforge"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="robots" content="noindex">
 <title>Cellforge</title><link rel="icon" href="icon.svg">
 <style>
@@ -8,10 +8,12 @@
 body.ocean{--bg1:#04202a;--bg2:#031421;--g1:rgba(0,170,200,.35);--g2:rgba(0,220,170,.22);--ac:#4ff0e0;--ac2:#38bdf8}
 body.ember{--bg1:#2a1208;--bg2:#160a10;--g1:rgba(255,120,40,.33);--g2:rgba(255,60,90,.2);--ac:#ffb15e;--ac2:#ff6b8b}
 *,*:before,*:after{box-sizing:border-box}html,body{margin:0;min-height:100%;width:100%;max-width:100%;overflow-x:hidden;overflow-x:clip}html{-webkit-text-size-adjust:100%}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--bg1),var(--bg2) 70%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;color:var(--tx);background-color:var(--bg2);-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+html{background-color:#06122a;min-height:100%;min-height:100dvh}html:has(body.ocean){background-color:#031421}html:has(body.ember){background-color:#160a10}
+.bgfx{background:linear-gradient(160deg,var(--bg1),var(--bg2) 70%);bottom:calc(-1 * env(safe-area-inset-bottom) - 40px)!important}
 .bgfx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}.bgfx i{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60vmax 50vmax at 0% 0%,var(--g1),transparent 60%),radial-gradient(60vmax 50vmax at 100% 80%,var(--g2),transparent 60%);z-index:0}
  .bgfx i{inset:-15%;animation:auroraDrift 22s ease-in-out infinite alternate;will-change:transform}@keyframes auroraDrift{to{transform:translate3d(4%,-3%,0) scale(1.09)}}
-.wrap{position:relative;z-index:1;width:100%;max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) max(16px,env(safe-area-inset-right)) calc(110px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.wrap{position:relative;z-index:1;width:100%;min-height:100vh;min-height:100dvh;max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) max(16px,env(safe-area-inset-right)) calc(110px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .brand{display:flex;gap:10px;align-items:center}.brand img{width:34px;height:34px;border-radius:10px}
 .brand b{font-size:19px}.brand b span,.title span{color:var(--ac)}.brand small{display:block;font-size:8.5px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
@@ -137,6 +139,6 @@ function dl(name,txt,type){const a=document.createElement('a');a.href=URL.create
 function ics(){const BY=['SU','MO','TU','WE','TH','FR','SA'],L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Cellforge//Web//EN'];S.prots.forEach(p=>{const t=p.time.replace(':','')+'00';let st=p.start;if(p.sched.t==='dow')for(let i=0;i<7&&!due(p,st);i++)st=addD(st,1);L.push('BEGIN:VEVENT','UID:'+p.id+'@cellforge','DTSTAMP:'+new Date().toISOString().replace(/[-:]|\.\d+/g,''),'DTSTART:'+st.replace(/-/g,'')+'T'+t,'DURATION:PT15M','SUMMARY:'+p.name+' '+p.dose+' '+p.unit+' ('+units(p,+p.dose)+' units)','RRULE:'+(p.sched.t==='dow'?'FREQ=WEEKLY;BYDAY='+p.sched.d.map(i=>BY[i]).join(','):'FREQ=DAILY;INTERVAL='+p.sched.n)+(p.end?';UNTIL='+p.end.replace(/-/g,'')+'T235959':''),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+p.name+' dose','TRIGGER:PT0M','END:VALARM','END:VEVENT')});L.push('END:VCALENDAR');dl('cellforge-reminders.ics',L.join('\r\n'),'text/calendar')}
 function exp(){dl('cellforge-backup-'+TODAY+'.json',JSON.stringify(S,null,2),'application/json')}
 function imp(el){const f=el.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);if(!o.prots)throw 0;S=Object.assign(blank(),o);save();R();alert('Backup restored.')}).catch(()=>alert('That file is not a Cellforge backup.'))}
-function R(){document.body.className=(S.theme||'aurora')+(S.anim?'':' motion-off');nav();$('#v').innerHTML=(V[tab]||V.today)();document.querySelectorAll('#v .card').forEach((c,i)=>c.style.setProperty('--i',i));if(tab==='tools')rbac()}
+function R(){document.body.className=(S.theme||'aurora')+(S.anim?'':' motion-off');{const c={aurora:'#080d1c',ocean:'#031421',ember:'#160a10'}[S.theme]||'#080d1c';document.querySelector('meta[name=theme-color]').content=c;document.documentElement.style.backgroundColor=c}nav();$('#v').innerHTML=(V[tab]||V.today)();document.querySelectorAll('#v .card').forEach((c,i)=>c.style.setProperty('--i',i));if(tab==='tools')rbac()}
 if(sessionStorage.getItem('cf.entered')||new URLSearchParams(location.search).has('skip'))enter(1);R();
 </script></body></html>
