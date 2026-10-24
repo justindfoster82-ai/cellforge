@@ -40,14 +40,24 @@ label{display:block;font-size:11.5px;color:var(--mut);margin:10px 0 4px}.g2{disp
 #title{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:radial-gradient(circle at 50% 30%,#1b1f5a,#070b1f 70%)}
 .logo{width:150px;height:150px;border-radius:50%;padding:8px;background:conic-gradient(from 0deg,#5ee7ff,#a78bfa,#ff8fb1,#5ee7ff);box-shadow:0 0 50px rgba(94,231,255,.45),0 0 110px rgba(167,139,250,.35)}
 .logo img{width:100%;height:100%;border-radius:50%;display:block;border:4px solid #070b1f}
-body.anim .logo{animation:pulse 3.5s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 70px rgba(94,231,255,.6),0 0 140px rgba(167,139,250,.45)}}
+.logo{position:relative}.logo:before{content:"";position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(94,231,255,.45),rgba(167,139,250,.25) 45%,transparent 70%);opacity:.35;z-index:-1;will-change:transform,opacity}
+.fl{position:absolute;inset:12px;pointer-events:none;clip-path:polygon(42.2% 19.1%,57.8% 19.1%,57.8% 41%,77.1% 74.2%,79% 78.5%,77% 81.2%,73.2% 81.8%,26.8% 81.8%,23% 81.2%,21% 78.5%,22.9% 74.2%,42.2% 41%)}
+.fl .fg{position:absolute;inset:0;background:radial-gradient(circle at 50% 65%,rgba(140,250,255,.75),transparent 55%);opacity:0;will-change:opacity}
+.fl i{position:absolute;bottom:18%;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 4px #bff8ff;opacity:0;will-change:transform,opacity}
+.orb{position:absolute;inset:-10px;border-radius:50%;pointer-events:none;will-change:transform}.orb.b{inset:-18px}
+.orb b{position:absolute;top:-3px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#5ee7ff;box-shadow:0 0 8px #5ee7ff}.orb b:nth-child(2){top:auto;bottom:-3px;background:#a78bfa;box-shadow:0 0 8px #a78bfa}.orb.b b{width:4px;height:4px;background:#ff8fb1;box-shadow:0 0 6px #ff8fb1}
+body.anim .logo:before{animation:glow 3.6s ease-in-out infinite}@keyframes glow{0%,100%{opacity:.3;transform:scale(.92)}50%{opacity:.9;transform:scale(1.06)}}
+body.anim .fl .fg{animation:fglow 3.6s ease-in-out infinite}@keyframes fglow{0%,100%{opacity:.05}50%{opacity:.55}}
+body.anim .fl i{animation:bub var(--d) ease-in infinite var(--t)}@keyframes bub{0%{opacity:0;transform:translate(0,0) scale(.6)}15%{opacity:.9}50%{transform:translate(var(--x),-26px) scale(1)}85%{opacity:.7}100%{opacity:0;transform:translate(0,-56px) scale(1.15)}}
+body.anim .orb{animation:spin 9s linear infinite}body.anim .orb.b{animation-duration:14s;animation-direction:reverse}@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important}}
 .eyebrow{margin-top:34px;font-size:11px;letter-spacing:.32em;color:var(--ac)}.title{font-size:46px;font-weight:800;margin:10px 0;letter-spacing:-.02em}.tag{color:#b9c3ea;max-width:300px;line-height:1.45;margin:0 0 30px}
 .enter{background:linear-gradient(90deg,#5ee7ff,#a78bfa);color:#0a0d26;font-weight:700;font-size:17px;padding:15px 34px;border-radius:30px;box-shadow:0 8px 30px rgba(94,231,255,.35)}
 .cap{margin-top:22px;font-size:10px;letter-spacing:.22em;color:var(--mut)}.democap{margin-top:8px;font-size:10px;color:#ffd479;letter-spacing:.1em}
 .themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 8px}.themes button{background:rgba(255,255,255,.05);border:1px solid var(--bd);font-size:13px}.themes button.on{border-color:var(--ac)}.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 svg.chart{width:100%;height:150px}.warn{color:#ffb86b;font-size:12.5px}.footer{display:flex;justify-content:space-between;font-size:9.5px;color:var(--mut);margin-top:16px;letter-spacing:.06em}
 </style></head><body class="anim">
-<div id="title"><div class="logo"><img src="icon.svg" alt=""></div>
+<div id="title"><div class="logo"><img src="icon.svg" alt=""><div class="fl"><div class="fg"></div><i style="left:45%;width:5px;height:5px;--d:2.8s;--t:-1.6s;--x:-4px"></i><i style="left:35%;width:3px;height:3px;--d:2.6s;--t:-2.2s;--x:-2px"></i><i style="left:33%;width:4px;height:4px;--d:3.6s;--t:-1.4s;--x:6px"></i><i style="left:41%;width:3px;height:3px;--d:3.1s;--t:-3.8s;--x:-6px"></i><i style="left:46%;width:5px;height:5px;--d:3.0s;--t:-1.2s;--x:4px"></i><i style="left:53%;width:3px;height:3px;--d:4.3s;--t:-1.3s;--x:0px"></i><i style="left:62%;width:4px;height:4px;--d:3.0s;--t:-1.9s;--x:-5px"></i><i style="left:65%;width:5px;height:5px;--d:2.6s;--t:-1.2s;--x:5px"></i><i style="left:49%;width:4px;height:4px;--d:3.4s;--t:-2.4s;--x:0px"></i><i style="left:58%;width:4px;height:4px;--d:3.1s;--t:-1.0s;--x:6px"></i><i style="left:32%;width:3px;height:3px;--d:2.7s;--t:-2.5s;--x:-2px"></i></div><div class="orb"><b></b><b></b></div><div class="orb b"><b></b><b></b></div></div>
 <div class="eyebrow">BUILT AROUND YOU</div><div class="title">Cell<span>forge</span></div>
 <p class="tag">Your protocols. Your progress. A clearer picture, every day.</p>
 <button class="enter" onclick="enter()">Enter Cellforge →</button>
