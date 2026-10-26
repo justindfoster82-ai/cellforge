@@ -148,30 +148,6 @@ if(sessionStorage.getItem('cf.entered')||new URLSearchParams(location.search).ha
 .cf-other{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-6px);transition:grid-template-rows .26s cubic-bezier(.25,1.25,.4,1),opacity .2s,transform .26s cubic-bezier(.25,1.25,.4,1)}
 .cf-other>input{min-height:0;overflow:hidden}.cf-other.open{grid-template-rows:1fr;opacity:1;transform:none;margin-top:8px}.cf-other:not(.open)>input{padding-top:0;padding-bottom:0;border-width:0}
 .cf-flash{animation:cfFlash .28s cubic-bezier(.25,1.25,.4,1)}@keyframes cfFlash{from{transform:scale(.96);box-shadow:0 0 0 3px rgba(123,229,242,.35)}}
-.cf-pk{text-align:left;cursor:pointer}
-.cf-sheet{position:fixed;inset:0;margin:0;padding:0;border:0;background:transparent;max-width:none;max-height:none;width:100%;height:100%;overflow:hidden;color:#e8eefc}
-.cf-sheet::backdrop{background:rgba(3,6,16,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:cfFade .22s ease both}
-.cf-sheet.out::backdrop{animation:cfFade .2s ease reverse both}
-.cf-sh{position:absolute;left:0;right:0;margin:0 auto;max-width:560px;bottom:var(--kb,0px);display:flex;flex-direction:column;gap:8px;max-height:min(78vh,calc(var(--vh,100vh) - env(safe-area-inset-top) - 24px));padding:8px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));border-radius:24px 24px 0 0;background:linear-gradient(180deg,rgba(30,38,70,.82),rgba(12,16,34,.9));border:1px solid rgba(200,216,255,.16);border-bottom:0;box-shadow:0 -12px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);animation:cfUp .28s cubic-bezier(.25,1.15,.4,1) both;transition:bottom .2s ease}
-.cf-sheet.out .cf-sh{animation:cfDown .2s cubic-bezier(.4,0,1,1) both}
-.cf-grab{width:38px;height:5px;border-radius:3px;background:rgba(255,255,255,.25);margin:2px auto 4px}
-#cf_q{width:100%;min-height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:inherit;font:inherit;font-size:16px;padding:0 14px;box-sizing:border-box}
-#cf_q:focus{outline:0;border-color:var(--ac,#7be5f2);box-shadow:0 0 0 3px rgba(123,229,242,.18)}
-.cf-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;min-height:120px;margin:0 -4px;padding:0 4px}
-.cf-row{display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:10px;text-align:left;background:transparent;border:0;border-radius:12px;color:inherit;font:inherit;font-size:15px;padding:12px;min-height:44px;cursor:pointer}
-.cf-row small{color:#8d9bb8;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
-.cf-row:active,.cf-row:hover{background:rgba(255,255,255,.07)}.cf-row.on{background:rgba(123,229,242,.12);color:var(--ac,#7be5f2)}
-.cf-row[hidden]{display:none}.cf-oth{border-top:1px solid rgba(255,255,255,.1);border-radius:0 0 12px 12px;flex:none}
-.cf-empty{display:none;text-align:center;color:#8d9bb8;padding:18px;font-size:13px}
-@keyframes cfUp{from{transform:translateY(100%)}to{transform:none}}@keyframes cfDown{to{transform:translateY(100%)}}@keyframes cfFade{from{opacity:0}}
-.motion-off .cf-sh,.motion-off .cf-sheet::backdrop{animation:none!important}
-@media(prefers-reduced-motion:reduce){.cf-sh,.cf-sheet::backdrop{animation:none!important}}
-dialog.cf-sheet,dialog.cf-sheet[open]{position:fixed!important;inset:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;overflow:hidden!important;animation:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-dialog.cf-sheet:before{display:none!important}
-dialog.cf-sheet .cf-row{background:transparent!important;color:#e8eefc!important;box-shadow:none!important;flex-direction:row!important;font-weight:500!important;min-height:44px!important;font-size:15px!important}
-dialog.cf-sheet .cf-row:hover,dialog.cf-sheet .cf-row:active{background:rgba(255,255,255,.07)!important}
-dialog.cf-sheet .cf-row.on{background:rgba(123,229,242,.12)!important;color:var(--ac,#7be5f2)!important}
-dialog.cf-sheet .cf-row small{color:#8d9bb8!important;font-weight:400}
 </style><script id="cf-pick-js">// CellForge v4 peptide picker (shared by web + iOS)
 function cfDef(e){var t=(e&&e.dose)||'',out={unit:'',dose:'',vial:'',bac:''};if(e&&e.def){return Object.assign(out,e.def)}
 var re=/(\d+(?:\.\d+)?)(\s*[–-]\s*\d+(?:\.\d+)?)?\s*(mg|IU|mcg)\b/g,m,all=[];while((m=re.exec(t)))all.push({n:m[1],range:!!m[2],u:m[3]});
@@ -187,30 +163,6 @@ if(s.value==='__other'){w.classList.add('open');nm.value='';cfHint('');setTimeou
 w.classList.remove('open');nm.value=s.value;cfHint(s.value);var e=(window.CF_LIB||[]).find(function(x){return x.n===s.value}),d=cfDef(e);
 if(d.unit&&$(ids.unit))$(ids.unit).value=d.unit;['vial','bac','dose'].forEach(function(k){var el=$(ids[k]);if(el){el.value=d[k];el.classList.remove('cf-flash');void el.offsetWidth;if(d[k]!=='')el.classList.add('cf-flash')}});
 ['input','change'].forEach(function(ev){[ids.unit,ids.vial,ids.bac,ids.dose].forEach(function(i){var el=$(i);if(el)el.dispatchEvent(new Event(ev,{bubbles:true}))})})}
-
-function cfEsc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
-function cfPickHTML(name,ids){var L=window.CF_LIB||[],hit=L.some(function(e){return e.n===name}),other=!!name&&!hit,v=hit?name:(other?'__other':'');
-return '<button type="button" id="cf_pk" class="cf-pk" data-value="'+cfEsc(v)+'" onclick="cfOpen()" aria-haspopup="dialog"><span id="cf_pkl">'+(hit?cfEsc(name):other?'Other / custom…':'Choose a peptide…')+'</span></button><div id="cf_hint" class="cf-hint"></div><div id="cf_otherw" class="cf-other '+(other?'open':'')+'"><input id="'+ids.name+'" placeholder="Type a peptide name" value="'+cfEsc(name)+'"></div>'}
-function cfOpen(){var L=window.CF_LIB||[],cur=document.getElementById('cf_pk').dataset.value,d=document.createElement('dialog');d.className='cf-sheet';
-d.innerHTML='<div class="cf-sh"><div class="cf-grab"></div><input id="cf_q" type="search" placeholder="Search peptides" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><div class="cf-list" id="cf_list">'+L.map(function(e){return'<button type="button" class="cf-row'+(e.n===cur?' on':'')+'" data-v="'+cfEsc(e.n)+'"><span>'+cfEsc(e.n)+'</span><small>'+cfEsc(e.c||'')+'</small></button>'}).join('')+'<div class="cf-empty" id="cf_empty">No matches</div></div><button type="button" class="cf-row cf-oth'+(cur==='__other'?' on':'')+'" data-v="__other"><span>Other / custom…</span><small>Type your own name</small></button></div>';
-var host=document.getElementById('cf_pk').closest('dialog')||document.body;host.appendChild(d);
-function close(){if(d._c)return;d._c=1;var q=still()?0:200;d.classList.add('out');document.activeElement&&document.activeElement.blur&&document.activeElement.blur();setTimeout(function(){try{d.close()}catch(e){}d.remove();vv&&vv.removeEventListener('resize',fit);vv&&vv.removeEventListener('scroll',fit)},q)}
-function still(){return document.body.classList.contains('motion-off')||matchMedia('(prefers-reduced-motion: reduce)').matches}
-d.addEventListener('cancel',function(e){e.preventDefault();close()});
-d.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close()}});
-d.addEventListener('click',function(e){var r=e.target.closest('.cf-row');if(r){cfChoose(r.dataset.v);close();return}if(e.target===d)close()});
-var q=d.querySelector('#cf_q');q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(),n=0;d.querySelectorAll('#cf_list .cf-row').forEach(function(r){var m=!s||r.dataset.v.toLowerCase().indexOf(s)>-1;r.hidden=!m;if(m)n++});d.querySelector('#cf_empty').style.display=n?'none':'block'});
-q.addEventListener('keydown',function(e){if(e.key==='Enter'){var f=d.querySelector('#cf_list .cf-row:not([hidden])');if(f){e.preventDefault();cfChoose(f.dataset.v);close()}}});
-var vv=window.visualViewport;function fit(){if(!vv)return;var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);d.style.setProperty('--kb',kb+'px');d.style.setProperty('--vh',vv.height+'px')}
-if(vv){vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()}
-d.showModal();q.focus({preventScroll:true});var on=d.querySelector('.cf-list .on');if(on)on.scrollIntoView({block:'center'})}
-function cfChoose(v){var ids=CF_IDS,b=document.getElementById('cf_pk'),w=document.getElementById('cf_otherw'),nm=document.getElementById(ids.name),$=function(i){return document.getElementById(i)};
-b.dataset.value=v;document.getElementById('cf_pkl').textContent=v==='__other'?'Other / custom…':v;
-if(v==='__other'){w.classList.add('open');nm.value='';cfHint('');setTimeout(function(){nm.focus()},240);return}
-w.classList.remove('open');nm.value=v;cfHint(v);var e=(window.CF_LIB||[]).find(function(x){return x.n===v}),d=cfDef(e);
-if(d.unit&&$(ids.unit))$(ids.unit).value=d.unit;['vial','bac','dose'].forEach(function(k){var el=$(ids[k]);if(el){el.value=d[k];el.classList.remove('cf-flash');void el.offsetWidth;if(d[k]!=='')el.classList.add('cf-flash')}});
-['input','change'].forEach(function(ev){[ids.unit,ids.vial,ids.bac,ids.dose].forEach(function(i){var el=$(i);if(el)el.dispatchEvent(new Event(ev,{bubbles:true}))})})}
-function cfPickInit(ids){CF_IDS=ids;var b=document.getElementById('cf_pk');if(b&&b.dataset.value&&b.dataset.value!=='__other')cfHint(b.dataset.value)}
 
 window.CF_LIB=LIB.slice().sort(function(a,b){return a.n.localeCompare(b.n)});</script>
 <style id="cf-glass-css">
