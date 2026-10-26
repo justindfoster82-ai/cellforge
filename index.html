@@ -141,4 +141,63 @@ function exp(){dl('cellforge-backup-'+TODAY+'.json',JSON.stringify(S,null,2),'ap
 function imp(el){const f=el.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);if(!o.prots)throw 0;S=Object.assign(blank(),o);save();R();alert('Backup restored.')}).catch(()=>alert('That file is not a Cellforge backup.'))}
 function R(){document.body.className=(S.theme||'aurora')+(S.anim?'':' motion-off');{const c={aurora:'#080d1c',ocean:'#031421',ember:'#160a10'}[S.theme]||'#080d1c';document.querySelector('meta[name=theme-color]').content=c;document.documentElement.style.backgroundColor=c}nav();$('#v').innerHTML=(V[tab]||V.today)();document.querySelectorAll('#v .card').forEach((c,i)=>c.style.setProperty('--i',i));if(tab==='tools')rbac()}
 if(sessionStorage.getItem('cf.entered')||new URLSearchParams(location.search).has('skip'))enter(1);R();
-</script></body></html>
+</script><style id="cf-glass-css">
+.cf-glass{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.cf-glass>button{position:relative;z-index:1;background:transparent!important;transition:color .2s}
+.cf-glass>button.on{box-shadow:none!important;border-color:transparent!important;outline:0}
+.cf-glass>button.cf-hot{color:var(--ac,#fff)}
+.cf-bub{position:absolute;z-index:0;top:0;left:0;pointer-events:none;border-radius:16px;will-change:transform;
+background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.07) 55%,rgba(255,255,255,.12));
+border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -6px 14px rgba(255,255,255,.05),0 4px 18px rgba(0,0,0,.28);
+-webkit-backdrop-filter:blur(10px) saturate(180%);backdrop-filter:blur(10px) saturate(180%)}
+.cf-glass.cf-drag .cf-bub{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.1) 55%,rgba(255,255,255,.16))}
+#v.cf-r{animation:cfInR .28s cubic-bezier(.25,1.25,.4,1) both!important}
+#v.cf-l{animation:cfInL .28s cubic-bezier(.25,1.25,.4,1) both!important}
+@keyframes cfInR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes cfInL{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.cf-glass~* .card,#v .card{animation-duration:.28s!important;animation-delay:calc(var(--i,0)*12ms)!important}
+.motion-off #v.cf-r,.motion-off #v.cf-l{animation:none!important}
+@media(prefers-reduced-motion:reduce){#v.cf-r,#v.cf-l{animation:none!important}}
+</style>
+<script id="cf-glass-js">
+(function(){
+var NAV=document.querySelector('#nav,#tabs');if(!NAV||typeof window.go!=='function')return;
+var bub=document.createElement('div');bub.className='cf-bub';NAV.classList.add('cf-glass');
+var x=0,w=0,h=0,top=0,vx=0,tx=0,sx=1,raf=0,drag=null,lastKey=null;
+function still(){return document.body.classList.contains('motion-off')||matchMedia('(prefers-reduced-motion: reduce)').matches}
+function btns(){return Array.prototype.slice.call(NAV.querySelectorAll(':scope>button'))}
+function keyOf(b){var m=/go\('([^']+)'\)/.exec(b.getAttribute('onclick')||'');return m&&m[1]}
+function idx(k){return btns().map(keyOf).indexOf(k)}
+function cur(){var b=NAV.querySelector(':scope>button.on');return b?keyOf(b):null}
+function geo(b){var r=b.getBoundingClientRect(),n=NAV.getBoundingClientRect();return{x:r.left-n.left-NAV.clientLeft,y:r.top-n.top-NAV.clientTop,w:r.width,h:r.height}}
+function paint(){bub.style.width=w+'px';bub.style.height=h+'px';var s=Math.min(1.45,sx),sy=1/Math.sqrt(s);bub.style.transform='translate3d('+x+'px,'+top+'px,0) scale('+s.toFixed(3)+','+sy.toFixed(3)+')'}
+function ensure(){if(bub.parentNode!==NAV)NAV.insertBefore(bub,NAV.firstChild)}
+function place(k,jump){ensure();var b=btns()[idx(k)];if(!b)return;var g=geo(b);w=g.w;h=g.h;top=g.y;tx=g.x;if(jump||still()||!bub._init){x=tx;vx=0;sx=1;bub._init=1;paint();return}spring()}
+function spring(){if(raf)return;var p=performance.now();raf=requestAnimationFrame(function f(t){var dt=Math.min(.032,Math.max(.001,(t-p)/1000));p=t;vx+=(-(x-tx)*1100-vx*62)*dt;x+=vx*dt;sx=1+Math.min(.45,Math.abs(vx)/2600);paint();if(Math.abs(x-tx)<.3&&Math.abs(vx)<8){x=tx;vx=0;sx=1;paint();raf=0;return}raf=requestAnimationFrame(f)})}
+function tick(){try{var H=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Haptics;if(H&&H.selectionChanged)H.selectionChanged()}catch(e){}}
+var og=window.go;
+window.go=function(k){var a=idx(cur()),b=idx(k),v=document.getElementById('v');
+if(v){v.classList.remove('cf-r','cf-l');if(a>-1&&b>-1&&a!==b){void v.offsetWidth;v.classList.add(b>a?'cf-r':'cf-l')}}
+var r=og.apply(this,arguments);place(k,false);return r};
+// re-attach bubble whenever the bar is re-rendered (theme change, R(), etc.)
+new MutationObserver(function(){if(bub.parentNode!==NAV){var k=cur();if(k){ensure();if(!drag)place(k,!raf&&x===tx)}}}).observe(NAV,{childList:true});
+function under(cx){var bs=btns(),best=null,d=1e9;bs.forEach(function(b){var r=b.getBoundingClientRect(),m=Math.abs(cx-(r.left+r.width/2));if(m<d){d=m;best=b}});return best}
+function hot(b){btns().forEach(function(o){o.classList.toggle('cf-hot',o===b&&!o.classList.contains('on'))})}
+NAV.addEventListener('pointerdown',function(e){if(e.button>0)return;var b=under(e.clientX);if(!b)return;
+drag={id:e.pointerId,x0:e.clientX,moved:false,lt:performance.now(),lx:e.clientX,b:b};try{NAV.setPointerCapture(e.pointerId)}catch(_){}});
+NAV.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.moved&&Math.abs(e.clientX-drag.x0)<6)return;
+if(!drag.moved){drag.moved=true;NAV.classList.add('cf-drag');if(raf){cancelAnimationFrame(raf);raf=0}ensure()}
+var n=NAV.getBoundingClientRect(),now=performance.now(),dt=Math.max(1,now-drag.lt),v=(e.clientX-drag.lx)/dt*1000;drag.lt=now;drag.lx=e.clientX;
+vx=v;x=Math.max(0,Math.min(NAV.clientWidth-w,e.clientX-n.left-NAV.clientLeft-w/2));sx=still()?1:1+Math.min(.45,Math.abs(v)/2200);paint();
+var b=under(e.clientX);if(b!==drag.b){drag.b=b;tick();hot(b)}});
+function end(e,cancel){if(!drag||e.pointerId!==drag.id)return;var d=drag;drag=null;NAV.classList.remove('cf-drag');hot(null);
+var b=cancel?NAV.querySelector(':scope>button.on'):(d.moved?under(e.clientX):d.b);var k=b&&keyOf(b);NAV._sup=performance.now();
+if(!k)return;if(k!==cur()){if(!d.moved)tick();window.go(k)}else place(k,false)}
+NAV.addEventListener('pointerup',function(e){end(e,false)});NAV.addEventListener('pointercancel',function(e){end(e,true)});
+// pointer handler owns taps; swallow the follow-up mouse/touch click but keep keyboard activation (detail 0)
+NAV.addEventListener('click',function(e){if(e.detail>0&&NAV._sup&&performance.now()-NAV._sup<800){e.stopPropagation();e.preventDefault()}},true);
+addEventListener('resize',function(){var k=cur();if(k)place(k,true)});
+function init(){var k=cur();if(k)place(k,true);else setTimeout(init,50)}init();
+})();
+</script>
+</body></html>
